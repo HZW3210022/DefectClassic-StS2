@@ -21,6 +21,12 @@ Usage:
 Environment:
     PUSH_ROOT     repository directory (default: cwd)
     PUSH_MESSAGE  overrides the commit message (default: local HEAD message)
+    GITHUB_TOKEN  used when no token is given on the command line
+
+The token may instead be kept in a file (never committed):
+    ~/.defect-classic-token      <- preferred, outside the repository
+    <repo>/.github-token         <- fallback, git-ignored
+Pass "-" as the token argument to force reading from there.
 """
 
 import base64
@@ -37,6 +43,30 @@ from concurrent.futures import ThreadPoolExecutor
 
 API = "https://api.github.com"
 ROOT = os.environ.get("PUSH_ROOT", os.getcwd())
+
+TOKEN_FILES = [
+    os.path.join(os.path.expanduser("~"), ".defect-classic-token"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, ".github-token"),
+]
+
+
+def resolve_token(argv_token):
+    """Token precedence: command line -> env var -> token file."""
+    if argv_token and argv_token not in ("-", "auto", ""):
+        return argv_token
+    for name in ("GITHUB_TOKEN", "GH_TOKEN"):
+        val = os.environ.get(name)
+        if val and val.strip():
+            print("token      : from environment variable %s" % name)
+            return val.strip()
+    for path in TOKEN_FILES:
+        path = os.path.abspath(path)
+        if os.path.isfile(path):
+            val = open(path, encoding="utf-8").read().strip()
+            if val:
+                print("token      : from file %s" % path)
+                return val
+    return None
 
 
 def find_git():
@@ -98,12 +128,21 @@ def api(method, path, token, payload=None, tries=5, raise_on_4xx=True):
                 return json.loads(body) if body else {}
         except urllib.error.HTTPError as e:
             detail = e.read().decode("utf-8", "replace")[:300]
-            # 4xx other than rate limiting is a real error - do not retry
-            if e.code < 500 and e.code != 429:
+            # GitHub signals "you are going too fast" as 403 with this text,
+            # and it IS worth waiting out - unlike a genuine permission 403.
+            secondary = e.code == 403 and "secondary rate limit" in detail.lower()
+            retryable = e.code >= 500 or e.code == 429 or secondary
+            if not retryable:
                 if raise_on_4xx:
                     raise SystemExit("[%s %s] HTTP %s: %s" % (method, path, e.code, detail))
                 return e.code, detail
-            last = "HTTP %s: %s" % (e.code, detail)
+            last = "HTTP %s: %s" % (e.code, detail[:160])
+            if secondary:
+                wait = 30 * attempt
+                print("      (secondary rate limit - waiting %ds before retry %d/%d)"
+                      % (wait, attempt, tries), flush=True)
+                time.sleep(wait)
+                continue
         except Exception as e:            # timeouts, connection resets
             last = "%s: %s" % (type(e).__name__, e)
         time.sleep(1.5 * attempt)
@@ -188,10 +227,17 @@ def check_token(token):
 
 
 def main():
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         print(__doc__)
         return 1
-    owner, repo, token = sys.argv[1], sys.argv[2], sys.argv[3]
+    owner, repo = sys.argv[1], sys.argv[2]
+    token = resolve_token(sys.argv[3] if len(sys.argv) > 3 else None)
+    if not token:
+        print("找不到 token。三种给法，任选其一：")
+        print("  1) 作为第 3 个参数： push_via_api.py <owner> <repo> <token>")
+        print("  2) 环境变量 GITHUB_TOKEN")
+        print("  3) 写进文件： %s" % TOKEN_FILES[0])
+        return 1
     branch = sys.argv[4] if len(sys.argv) > 4 else "main"
 
     if not check_token(token):
@@ -229,7 +275,7 @@ def main():
 
     t0 = time.time()
     entries, done = [], 0
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    with ThreadPoolExecutor(max_workers=5) as pool:
         for entry in pool.map(make_blob, files):
             entries.append(entry)
             done += 1

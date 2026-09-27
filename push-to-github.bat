@@ -28,12 +28,21 @@ echo   and you should delete it on GitHub afterwards.
 echo.
 pause
 
-set /p TOKEN=Paste your token and press Enter: 
-if "%TOKEN%"=="" (
-    echo.
-    echo [cancelled] no token entered.
-    pause
-    exit /b 1
+REM --- token: prefer the local token file, fall back to asking ----------------
+set "TOKENFILE=%USERPROFILE%\.defect-classic-token"
+if exist "%TOKENFILE%" (
+    echo   Using the saved token:
+    echo     %TOKENFILE%
+    echo   ^(edit that file to change it, or delete it to be asked again^)
+    set "TOKEN=-"
+) else (
+    set /p TOKEN=Paste your token and press Enter: 
+    if "!TOKEN!"=="" (
+        echo.
+        echo [cancelled] no token entered.
+        pause
+        exit /b 1
+    )
 )
 
 REM --- 0) locate git -----------------------------------------------------------

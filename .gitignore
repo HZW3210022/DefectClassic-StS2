@@ -40,3 +40,7 @@ desktop.ini
 # Python bytecode
 __pycache__/
 *.pyc
+
+# never commit credentials
+.github-token
+*.token
