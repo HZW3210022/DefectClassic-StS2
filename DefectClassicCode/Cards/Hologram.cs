@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：全息影像。</summary>
 public sealed class Hologram : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(3m, ValueProp.Move)];
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     public Hologram() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
@@ -38,7 +39,7 @@ public sealed class Hologram : DefectClassicCard
 
     public override List<(string, string)> Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("全息影像", "获得 {Block:diff()} 点 格挡 。\n将弃牌堆中的一张牌放入你的手牌。"),
-        _ => new CardLoc("Hologram", "Gain {Block:diff()} Block.\nPut a card from your discard pile into your hand.")
+        "zhs" => new CardLoc("全息影像", "获得 {Block:diff()} 点 格挡 。\n将弃牌堆中的一张牌放入你的手牌。", ("selectionScreenPrompt", "选择一张牌加入你的手牌。")),
+        _ => new CardLoc("Hologram", "Gain {Block:diff()} Block.\nPut a card from your discard pile into your hand.", ("selectionScreenPrompt", "Choose a card to put back in your Hand."))
     };
 }

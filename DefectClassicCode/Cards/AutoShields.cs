@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：自动护盾。</summary>
 public sealed class AutoShields : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(11m, ValueProp.Move)];
     public AutoShields() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) {

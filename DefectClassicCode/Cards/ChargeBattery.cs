@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：充能电池。</summary>
 public sealed class ChargeBattery : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Move), new DynamicVar("MagicNumber", 1m)];
     public ChargeBattery() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) {

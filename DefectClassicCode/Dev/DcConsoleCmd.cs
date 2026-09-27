@@ -50,9 +50,10 @@ public sealed class DcConsoleCmd : AbstractConsoleCmd
 
     private static ICardScope ScopeFor(bool combat)
     {
-        return combat
+        // Process 里已确认有进行中的存档，战斗态由调用方传入，二者之一必然可用。
+        return (combat
             ? CombatManager.Instance.DebugOnlyGetState()
-            : RunManager.Instance.DebugOnlyGetState();
+            : RunManager.Instance.DebugOnlyGetState())!;
     }
 
     private static string ResolveId(string raw)

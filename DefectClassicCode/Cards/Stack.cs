@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：堆叠。</summary>
 public sealed class Stack : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(0m, ValueProp.Move)];
     public Stack() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) {

@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：跳跃。</summary>
 public sealed class Leap : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(9m, ValueProp.Move)];
     public Leap() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) {

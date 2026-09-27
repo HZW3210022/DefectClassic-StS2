@@ -38,7 +38,7 @@ public sealed class Recycle : DefectClassicCard
 
     public override List<(string, string)> Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("回收", "消耗 一张牌。\n获得与其耗能相等的 {energyPrefix:energyIcons(1)} 。"),
-        _ => new CardLoc("Recycle", "Exhaust a card.\nGain {energyPrefix:energyIcons(1)} equal to its cost.")
+        "zhs" => new CardLoc("回收", "消耗 一张牌。\n获得与其耗能相等的 {energyPrefix:energyIcons(1)} 。", ("selectionScreenPrompt", "选择一张牌[gold]消耗[/gold]。")),
+        _ => new CardLoc("Recycle", "Exhaust a card.\nGain {energyPrefix:energyIcons(1)} equal to its cost.", ("selectionScreenPrompt", "Choose a card to [gold]Exhaust[/gold]."))
     };
 }

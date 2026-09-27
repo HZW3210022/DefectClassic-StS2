@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：基因算法。</summary>
 public sealed class GeneticAlgorithm : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     private decimal _extra;
     private decimal Extra { get => _extra; set { AssertMutable(); _extra = value; } }
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(1m, ValueProp.Move), new DynamicVar("MagicNumber", 2m)];

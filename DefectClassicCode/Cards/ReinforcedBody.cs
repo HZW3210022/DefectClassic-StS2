@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：强化躯体：每点能量提供格挡。</summary>
 public sealed class ReinforcedBody : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override bool HasEnergyCostX => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Move)];
     public ReinforcedBody() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }

@@ -1,3 +1,5 @@
 {
-  
+  "DEFECTCLASSIC-HOLOGRAM.selectionScreenPrompt": "Choose a card to put back in your Hand.",
+  "DEFECTCLASSIC-RECYCLE.selectionScreenPrompt": "Choose a card to [gold]Exhaust[/gold].",
+  "DEFECTCLASSIC-SEEK.selectionScreenPrompt": "Choose a card to put in your Hand."
 }

@@ -25,6 +25,7 @@ namespace DefectClassic.DefectClassicCode.Cards;
 /// <summary>一代故障机器人：力场。</summary>
 public sealed class ForceField : DefectClassicCard
 {
+    public override bool GainsBlock => true;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(12m, ValueProp.Move)];
 
     public ForceField() : base(4, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }

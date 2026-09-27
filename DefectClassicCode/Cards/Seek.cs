@@ -39,7 +39,7 @@ public sealed class Seek : DefectClassicCard
 
     public override List<(string, string)> Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("搜寻", "从抽牌堆中选择 {MagicNumber:diff()} 张牌放入你的手牌。"),
-        _ => new CardLoc("Seek", "Put {MagicNumber:diff()} card{MagicNumber:plural:|s} from your draw pile into your hand.")
+        "zhs" => new CardLoc("搜寻", "从抽牌堆中选择 {MagicNumber:diff()} 张牌放入你的手牌。", ("selectionScreenPrompt", "选择一张牌加入你的手牌。")),
+        _ => new CardLoc("Seek", "Put {MagicNumber:diff()} card{MagicNumber:plural:|s} from your draw pile into your hand.", ("selectionScreenPrompt", "Choose a card to put in your Hand."))
     };
 }
