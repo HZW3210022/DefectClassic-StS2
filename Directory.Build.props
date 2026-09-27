@@ -1,0 +1,22 @@
+<Project>
+    <PropertyGroup>
+        <!-- MegaDot is Mega Crit's custom Godot build. Its version MUST match the game's
+             Godot version (4.5.1) or the game will refuse to load the exported .pck.
+
+             The default below points at the location used during development.
+             Override it in a local.props file (which is gitignored) if yours differs:
+                 <Project><PropertyGroup><GodotPath>D:/tools/MegaDot.exe</GodotPath></PropertyGroup></Project>
+             Or pass it on the command line:  dotnet publish -p:GodotPath=... -->
+        <GodotPath Condition="'$(GodotPath)' == ''">C:/megadot/MegaDot_v4.5.1-stable_mono_win64.exe</GodotPath>
+
+        <!-- Examples
+             Windows : C:/megadot/MegaDot_v4.5.1-stable_mono_win64.exe
+             Linux   : /usr/lib/megadot/MegaDot_v4.5.1-stable_mono_linux.x86_64
+             macOS   : /Users/user/Applications/Megadot.app/Contents/MacOS/Godot
+        -->
+
+        <!-- Sts2Path is auto-detected by Sts2PathDiscovery.props (Steam registry + default
+             library folders). Uncomment and set it manually only if detection fails. -->
+        <!-- <Sts2Path>D:/Steam/steamapps/common/Slay the Spire 2</Sts2Path> -->
+    </PropertyGroup>
+</Project>

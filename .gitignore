@@ -1,0 +1,38 @@
+# Godot / .NET build artefacts
+.godot/
+bin/
+obj/
+publish/
+publish-custom/
+/android/
+
+# Godot-generated metadata (recreated automatically on first open/import)
+*.import
+*.uid
+.template.config/
+
+# Local overrides (machine-specific paths)
+local.props
+*.user
+*.userprefs
+
+# IDE
+.vs/
+.idea/
+.vscode/
+.editorconfig
+
+# No longer ignored on purpose (old template ignored it): the repo ships a working
+# default and it can be overridden per-machine via local.props.
+# Directory.Build.props
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Extracted Slay the Spire 1 card art (see tools/extract_assets.py).
+# Kept out of git only if you prefer not to redistribute the artwork.
+# Comment the next two lines out if you DO want to commit the extracted art.
+# DefectClassic/images/card_portraits/*.png
+# DefectClassic/images/card_portraits/big/*.png

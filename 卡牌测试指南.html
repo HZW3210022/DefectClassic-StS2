@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>经典故障机器人 · 卡牌测试指南</title>
+<style>
+  :root {
+    --bg:#f6f7f9; --panel:#fff; --line:#e3e6ea; --text:#1f2328; --dim:#6b7280;
+    --accent:#2f7ed8; --key:#fff8e6; --keyline:#f0c869; --code:#f0f2f5;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:28px 20px 60px; background:var(--bg); color:var(--text);
+    font:14px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  h1 { font-size:23px; margin:0 0 6px; }
+  .sub { color:var(--dim); margin-bottom:22px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:18px 20px; margin-bottom:18px; }
+  h2 { font-size:16px; margin:0 0 12px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  h3 { font-size:14px; margin:18px 0 8px; color:#374151; }
+  code { background:var(--code); padding:2px 6px; border-radius:4px;
+    font-family:ui-monospace,Consolas,monospace; font-size:12.5px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:7px 9px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { background:#fafbfc; font-weight:600; color:#374151; position:sticky; top:0; }
+  td.c { text-align:center; }
+  td.dim, .dim { color:var(--dim); }
+  tr.keyrow { background:var(--key); }
+  tr.keyrow td:first-child { border-left:3px solid var(--keyline); }
+  .note { color:#8a6a12; font-size:12.5px; }
+  button.cp { margin-left:6px; padding:1px 7px; font-size:11px; cursor:pointer;
+    border:1px solid #cbd2da; background:#fff; border-radius:4px; color:#374151; }
+  button.cp:hover { background:#eef2f7; }
+  button.cp:active { background:#dbe6f3; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
+  .card { border:1px solid var(--line); border-radius:8px; padding:12px 14px; background:#fcfcfd; }
+  .card b { display:block; margin-bottom:4px; }
+  .steps { counter-reset:s; list-style:none; padding:0; margin:0; }
+  .steps li { counter-increment:s; position:relative; padding:6px 0 6px 34px; }
+  .steps li::before { content:counter(s); position:absolute; left:0; top:6px; width:22px; height:22px;
+    background:var(--accent); color:#fff; border-radius:50%; text-align:center; line-height:22px;
+    font-size:12px; font-weight:600; }
+  .tblwrap { max-height:640px; overflow:auto; border:1px solid var(--line); border-radius:8px; }
+  .toast { position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+    background:#1f2328; color:#fff; padding:8px 16px; border-radius:6px; font-size:13px;
+    opacity:0; transition:.2s; pointer-events:none; }
+  .toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
+  .warn { background:#fff5f5; border:1px solid #f3c2c2; color:#8a2828; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>经典故障机器人 · 卡牌测试指南</h1>
+  <div class="sub">75 张卡全在游戏里了，这份表格帮你在十分钟内都过一遍，不用靠抽卡运气。</div>
+
+  <div class="panel">
+    <h2>三步上手</h2>
+    <ol class="steps">
+      <li>启动游戏 <b>（mod 模式）</b>，选「经典故障机器人」开一局，进任意一场战斗。</li>
+      <li>按反引号键 <code>`</code> 打开控制台（在 <code>Esc</code> 下面、数字 <code>1</code> 左边）。
+          打不开就试 <code>'</code>、<code>^</code>、<code>*</code> 或 <code>Shift+8</code>。</li>
+      <li>输入 <code>godmode</code> 回车（无敌），再输入 <code>energy 99</code> 回车。
+          现在你可以安心试牌，不用担心被打死或没能量。</li>
+    </ol>
+    <div style="margin-top:12px" class="dim">
+      控制台快捷键：<code>F11</code> 全屏 · <code>Esc</code> 关闭 · <code>Tab</code> 自动补全 · <code>↑</code> 调出上一条命令
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>专为这个 mod 加的命令：<code>dc</code></h2>
+    <div class="grid">
+      <div class="card">
+        <b>把整套卡池塞进抽牌堆</b>
+        <code>dc pool</code><br>
+        <span class="dim">75 张卡各 1 张进抽牌堆。然后 <code>draw 10</code> 抽满手牌，打完再抽，几回合就能看全。</span>
+      </div>
+      <div class="card">
+        <b>手牌直接塞某张卡</b>
+        <code>dc hand claw 5</code><br>
+        <span class="dim">卡 ID 可省略前缀。<code>dc hand zap</code> = 5 张电球。最多受 10 张手牌上限限制。</span>
+      </div>
+      <div class="card">
+        <b>列出全部卡 ID</b>
+        <code>dc list</code><br>
+        <span class="dim">想用原生的 <code>card</code> 命令时，从这里复制 ID。</span>
+      </div>
+    </div>
+    <h3>典型用法</h3>
+    <div class="dim">
+      <code>dc pool</code> → <code>draw 10</code> → 逐个打出手牌 → <code>draw 10</code> → 重复。
+      想单独测某张就 <code>dc hand &lt;卡名&gt; &lt;张数&gt;</code>。
+      想测升级版：先塞进手牌，再 <code>upgrade 0</code>（0 = 手牌最左边那张）。
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>原版命令速查</h2>
+    <table>
+      <tr><th>命令</th><th>作用</th></tr>
+      <tr><td><code>godmode</code></td><td>无敌（再输一次关闭）</td></tr>
+      <tr><td><code>energy 99</code></td><td>加 99 点能量</td></tr>
+      <tr><td><code>draw 10</code></td><td>抽 10 张牌</td></tr>
+      <tr><td><code>card DEFECTCLASSIC-ZAP</code></td><td>把指定卡加进手牌（可加第二参数指定牌堆）</td></tr>
+      <tr><td><code>upgrade 0</code></td><td>升级手牌第 0 张（0 是最左边）</td></tr>
+      <tr><td><code>heal 999</code></td><td>回血</td></tr>
+      <tr><td><code>block 999 0</code></td><td>给自己加格挡（0 = 自己）</td></tr>
+      <tr><td><code>kill all</code></td><td>秒掉所有敌人（快速过战斗）</td></tr>
+      <tr><td><code>fight &lt;encounter-id&gt;</code></td><td>直接跳进指定战斗</td></tr>
+      <tr><td><code>unlock all</code></td><td>解锁全部图鉴</td></tr>
+      <tr><td><code>help</code></td><td>列出全部命令</td></tr>
+    </table>
+  </div>
+
+  <div class="panel warn">
+    <h2>重点验这几张（本轮刚修过，14 张）</h2>
+    <div>表格里<b>黄色高亮</b>的行就是。每张右侧写了「应该看到什么」。</div>
+  </div>
+
+  <div class="panel">
+    <h2>全部 75 张卡 · 点「复制命令」即可粘贴到控制台</h2>
+    <div class="tblwrap">
+    <table>
+      <thead>
+      <tr><th>卡 ID / 命令</th><th>中文名</th><th>English</th><th>费</th><th>类型</th><th>稀有度</th><th>验证要点</th></tr>
+      </thead>
+      <tbody>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-AGGREGATE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-AGGREGATE">复制命令</button></td>
+        <td>汇集</td>
+        <td class="dim">Aggregate</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-ALL_FOR_ONE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-ALL_FOR_ONE">复制命令</button></td>
+        <td>万物一心</td>
+        <td class="dim">All for One</td>
+        <td class="c">2</td>
+        <td>攻击</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-AMPLIFY</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-AMPLIFY">复制命令</button></td>
+        <td>增幅</td>
+        <td class="dim">Amplify</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note">本回合没用掉的话，**回合结束就消失**（不会留到下回合）</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-AUTO_SHIELDS</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-AUTO_SHIELDS">复制命令</button></td>
+        <td>自动护盾</td>
+        <td class="dim">Auto-Shields</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BALL_LIGHTNING</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BALL_LIGHTNING">复制命令</button></td>
+        <td>球状闪电</td>
+        <td class="dim">Ball Lightning</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BARRAGE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BARRAGE">复制命令</button></td>
+        <td>弹幕齐射</td>
+        <td class="dim">Barrage</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BEAM_CELL</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BEAM_CELL">复制命令</button></td>
+        <td>光束射线</td>
+        <td class="dim">Beam Cell</td>
+        <td class="c">0</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-BIASED_COGNITION</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BIASED_COGNITION">复制命令</button></td>
+        <td>偏差认知</td>
+        <td class="dim">Biased Cognition</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note">打出后集中应 **+4**（升级 +5），之后每回合才 -1；修之前是完全不加还倒扣</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BLIZZARD</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BLIZZARD">复制命令</button></td>
+        <td>暴雪</td>
+        <td class="dim">Blizzard</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BOOT_SEQUENCE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BOOT_SEQUENCE">复制命令</button></td>
+        <td>启动流程</td>
+        <td class="dim">Boot Sequence</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BUFFER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BUFFER">复制命令</button></td>
+        <td>缓冲</td>
+        <td class="dim">Buffer</td>
+        <td class="c">2</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-BULLSEYE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-BULLSEYE">复制命令</button></td>
+        <td>瞄准靶心</td>
+        <td class="dim">Bullseye</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-CAPACITOR</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CAPACITOR">复制命令</button></td>
+        <td>扩容</td>
+        <td class="dim">Capacitor</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note">连续打出两次，球槽应累计 **+4**（修之前第二次不加）</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CHAOS</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CHAOS">复制命令</button></td>
+        <td>混沌</td>
+        <td class="dim">Chaos</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CHARGE_BATTERY</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CHARGE_BATTERY">复制命令</button></td>
+        <td>充电</td>
+        <td class="dim">Charge Battery</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CHILL</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CHILL">复制命令</button></td>
+        <td>冰寒</td>
+        <td class="dim">Chill</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CLAW</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CLAW">复制命令</button></td>
+        <td>爪击</td>
+        <td class="dim">Claw</td>
+        <td class="c">0</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-COLD_SNAP</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-COLD_SNAP">复制命令</button></td>
+        <td>寒流</td>
+        <td class="dim">Cold Snap</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-COMPILE_DRIVER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-COMPILE_DRIVER">复制命令</button></td>
+        <td>编译冲击</td>
+        <td class="dim">Compile Driver</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CONSUME</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CONSUME">复制命令</button></td>
+        <td>耗尽</td>
+        <td class="dim">Consume</td>
+        <td class="c">2</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-COOLHEADED</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-COOLHEADED">复制命令</button></td>
+        <td>冷静头脑</td>
+        <td class="dim">Coolheaded</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CORE_SURGE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CORE_SURGE">复制命令</button></td>
+        <td>核心电涌</td>
+        <td class="dim">Core Surge</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-CREATIVE_A_I</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-CREATIVE_A_I">复制命令</button></td>
+        <td>创造性AI</td>
+        <td class="dim">Creative AI</td>
+        <td class="c">3</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DARKNESS</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DARKNESS">复制命令</button></td>
+        <td>漆黑</td>
+        <td class="dim">Darkness</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DEFEND</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DEFEND">复制命令</button></td>
+        <td>防御</td>
+        <td class="dim">Defend</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>基础</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DEFRAGMENT</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DEFRAGMENT">复制命令</button></td>
+        <td>碎片整理</td>
+        <td class="dim">Defragment</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DOOM_AND_GLOOM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DOOM_AND_GLOOM">复制命令</button></td>
+        <td>愁云惨淡</td>
+        <td class="dim">Doom and Gloom</td>
+        <td class="c">2</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DOUBLE_ENERGY</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DOUBLE_ENERGY">复制命令</button></td>
+        <td>双倍能量</td>
+        <td class="dim">Double Energy</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-DUALCAST</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-DUALCAST">复制命令</button></td>
+        <td>双重释放</td>
+        <td class="dim">Dualcast</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>基础</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-ECHO_FORM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-ECHO_FORM">复制命令</button></td>
+        <td>回响形态</td>
+        <td class="dim">Echo Form</td>
+        <td class="c">3</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-ELECTRODYNAMICS</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-ELECTRODYNAMICS">复制命令</button></td>
+        <td>电动力学</td>
+        <td class="dim">Electrodynamics</td>
+        <td class="c">2</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note">持有它时，闪电球应该打**全体**；卡面写「生成 2 个」（升级 3）</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-EQUILIBRIUM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-EQUILIBRIUM">复制命令</button></td>
+        <td>均衡</td>
+        <td class="dim">Equilibrium</td>
+        <td class="c">2</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-F_T_L</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-F_T_L">复制命令</button></td>
+        <td>超越光速</td>
+        <td class="dim">FTL</td>
+        <td class="c">0</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-FISSION</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-FISSION">复制命令</button></td>
+        <td>裂变</td>
+        <td class="dim">Fission</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note">升级后每激发一个球 = 1 能量 + **1 张牌**（不是 2 张）</td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-FORCE_FIELD</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-FORCE_FIELD">复制命令</button></td>
+        <td>力场</td>
+        <td class="dim">Force Field</td>
+        <td class="c">4</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note">费用应随本场打出的能力牌数递减</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-FUSION</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-FUSION">复制命令</button></td>
+        <td>聚变</td>
+        <td class="dim">Fusion</td>
+        <td class="c">2</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-GENETIC_ALGORITHM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-GENETIC_ALGORITHM">复制命令</button></td>
+        <td>遗传算法</td>
+        <td class="dim">Genetic Algorithm</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-GLACIER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-GLACIER">复制命令</button></td>
+        <td>冰川</td>
+        <td class="dim">Glacier</td>
+        <td class="c">2</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-GO_FOR_THE_EYES</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-GO_FOR_THE_EYES">复制命令</button></td>
+        <td>眼部攻击</td>
+        <td class="dim">Go for the Eyes</td>
+        <td class="c">0</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-HEATSINKS</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-HEATSINKS">复制命令</button></td>
+        <td>散热片</td>
+        <td class="dim">Heatsinks</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-HELLO_WORLD</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-HELLO_WORLD">复制命令</button></td>
+        <td>你好，世界</td>
+        <td class="dim">Hello World</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-HOLOGRAM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-HOLOGRAM">复制命令</button></td>
+        <td>全息影像</td>
+        <td class="dim">Hologram</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-HYPERBEAM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-HYPERBEAM">复制命令</button></td>
+        <td>超能光束</td>
+        <td class="dim">Hyperbeam</td>
+        <td class="c">2</td>
+        <td>攻击</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-LEAP</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-LEAP">复制命令</button></td>
+        <td>飞跃</td>
+        <td class="dim">Leap</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-LOOP</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-LOOP">复制命令</button></td>
+        <td>循环</td>
+        <td class="dim">Loop</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-MACHINE_LEARNING</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-MACHINE_LEARNING">复制命令</button></td>
+        <td>机器学习</td>
+        <td class="dim">Machine Learning</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-MELTER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-MELTER">复制命令</button></td>
+        <td>熔化</td>
+        <td class="dim">Melter</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-METEOR_STRIKE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-METEOR_STRIKE">复制命令</button></td>
+        <td>陨石打击</td>
+        <td class="dim">Meteor Strike</td>
+        <td class="c">5</td>
+        <td>攻击</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-MULTI_CAST</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-MULTI_CAST">复制命令</button></td>
+        <td>多重释放</td>
+        <td class="dim">Multi-Cast</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note">升级后应为 X**+1** 次</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-OVERCLOCK</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-OVERCLOCK">复制命令</button></td>
+        <td>超频</td>
+        <td class="dim">Overclock</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-RAINBOW</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-RAINBOW">复制命令</button></td>
+        <td>彩虹</td>
+        <td class="dim">Rainbow</td>
+        <td class="c">2</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-REBOOT</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-REBOOT">复制命令</button></td>
+        <td>重启</td>
+        <td class="dim">Reboot</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note">手牌**和弃牌堆**都要洗回抽牌堆</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-REBOUND</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-REBOUND">复制命令</button></td>
+        <td>弹回</td>
+        <td class="dim">Rebound</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-RECURSION</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-RECURSION">复制命令</button></td>
+        <td>递归</td>
+        <td class="dim">Recursion</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-RECYCLE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-RECYCLE">复制命令</button></td>
+        <td>回收</td>
+        <td class="dim">Recycle</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-REINFORCED_BODY</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-REINFORCED_BODY">复制命令</button></td>
+        <td>硬化机体</td>
+        <td class="dim">Reinforced Body</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-REPROGRAM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-REPROGRAM">复制命令</button></td>
+        <td>重编程</td>
+        <td class="dim">Reprogram</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-RIP_AND_TEAR</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-RIP_AND_TEAR">复制命令</button></td>
+        <td>狂乱撕扯</td>
+        <td class="dim">Rip and Tear</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-SCRAPE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SCRAPE">复制命令</button></td>
+        <td>刮削</td>
+        <td class="dim">Scrape</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note">抽到的牌里，**本回合费用为 0 的留下**，其余丢弃</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-SEEK</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SEEK">复制命令</button></td>
+        <td>搜寻</td>
+        <td class="dim">Seek</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>稀有</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-SELF_REPAIR</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SELF_REPAIR">复制命令</button></td>
+        <td>自我修复</td>
+        <td class="dim">Self Repair</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-SKIM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SKIM">复制命令</button></td>
+        <td>快速检索</td>
+        <td class="dim">Skim</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-STACK</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STACK">复制命令</button></td>
+        <td>堆栈</td>
+        <td class="dim">Stack</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-STATIC_DISCHARGE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STATIC_DISCHARGE">复制命令</button></td>
+        <td>静电释放</td>
+        <td class="dim">Static Discharge</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note">被**完全格挡**的攻击**不该**触发生球</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-STEAM_BARRIER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STEAM_BARRIER">复制命令</button></td>
+        <td>蒸汽护壁</td>
+        <td class="dim">Steam Barrier</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-STORM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STORM">复制命令</button></td>
+        <td>雷暴</td>
+        <td class="dim">Storm</td>
+        <td class="c">1</td>
+        <td>能力</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-STREAMLINE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STREAMLINE">复制命令</button></td>
+        <td>精简改良</td>
+        <td class="dim">Streamline</td>
+        <td class="c">2</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note">只降**这一张**的费用，不该波及其他同名卡</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-STRIKE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-STRIKE">复制命令</button></td>
+        <td>打击</td>
+        <td class="dim">Strike</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>基础</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-SUNDER</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SUNDER">复制命令</button></td>
+        <td>分离</td>
+        <td class="dim">Sunder</td>
+        <td class="c">3</td>
+        <td>攻击</td>
+        <td>罕见</td>
+        <td class="note">打死敌人应 **回 3 点能量**</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-SWEEPING_BEAM</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-SWEEPING_BEAM">复制命令</button></td>
+        <td>扫荡射线</td>
+        <td class="dim">Sweeping Beam</td>
+        <td class="c">1</td>
+        <td>攻击</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-TEMPEST</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-TEMPEST">复制命令</button></td>
+        <td>暴风雨</td>
+        <td class="dim">Tempest</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note">升级后应为 X**+1** 个球</td>
+      </tr>
+      <tr class="keyrow">
+        <td class="id"><code>DEFECTCLASSIC-THUNDER_STRIKE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-THUNDER_STRIKE">复制命令</button></td>
+        <td>雷霆打击</td>
+        <td class="dim">Thunder Strike</td>
+        <td class="c">3</td>
+        <td>攻击</td>
+        <td>稀有</td>
+        <td class="note">每段应打**随机一个**敌人，不是全体</td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-TURBO</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-TURBO">复制命令</button></td>
+        <td>内核加速</td>
+        <td class="dim">TURBO</td>
+        <td class="c">0</td>
+        <td>技能</td>
+        <td>普通</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-WHITE_NOISE</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-WHITE_NOISE">复制命令</button></td>
+        <td>白噪声</td>
+        <td class="dim">White Noise</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>罕见</td>
+        <td class="note"></td>
+      </tr>
+      <tr class="">
+        <td class="id"><code>DEFECTCLASSIC-ZAP</code>
+          <button class="cp" data-cmd="card DEFECTCLASSIC-ZAP">复制命令</button></td>
+        <td>电击</td>
+        <td class="dim">Zap</td>
+        <td class="c">1</td>
+        <td>技能</td>
+        <td>基础</td>
+        <td class="note"></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>说明</h2>
+    <ul style="margin:0; padding-left:20px">
+      <li>控制台之所以能用，是因为游戏里这段判断：<code>ShouldAllowDebugCommands = … || 正在跑 mod</code> —— 你装了 mod，所以调试命令自动放开。</li>
+      <li><code>dc</code> 命令是本 mod 自己注册的（二代控制台支持 mod 扩展命令）。</li>
+      <li>所有改牌行为只在<b>当前这局</b>生效，不会污染存档的牌组。不想要了就重开一局。</li>
+      <li>如果哪张卡的实际表现和表格里的「应该看到什么」不符，把卡名和现象告诉我即可。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="toast" id="toast">已复制</div>
+<script>
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('button.cp');
+  if (!b) return;
+  var text = b.getAttribute('data-cmd');
+  var done = function () {
+    var t = document.getElementById('toast');
+    t.textContent = '已复制：' + text;
+    t.classList.add('on');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(function () { t.classList.remove('on'); }, 1400);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+  } else { fallback(text, done); }
+});
+function fallback(text, done) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch (err) {}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>

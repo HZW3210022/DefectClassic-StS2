@@ -1,0 +1,38 @@
+MIT License
+
+Copyright (c) 2026 HZW3210022
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+
+NOTE ON THIRD-PARTY ASSETS
+
+This license covers the source code of the mod only.
+
+Slay the Spire, Slay the Spire 2, their card artwork, card text and other game
+assets are copyright (c) Mega Crit Games and are NOT covered by the MIT
+license above. Card portraits and card text included in this repository are
+extracted from a legitimately owned copy of Slay the Spire 1 and are
+redistributed solely so that this fan-made port is playable. No ownership is
+claimed over them. They can be regenerated from your own copy of the game with
+tools/extract_assets.py.
+
+This project is an unofficial fan work and is not affiliated with, endorsed by,
+or sponsored by Mega Crit Games.
