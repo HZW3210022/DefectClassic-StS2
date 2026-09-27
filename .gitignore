@@ -36,3 +36,7 @@ desktop.ini
 # Comment the next two lines out if you DO want to commit the extracted art.
 # DefectClassic/images/card_portraits/*.png
 # DefectClassic/images/card_portraits/big/*.png
+
+# Python bytecode
+__pycache__/
+*.pyc
